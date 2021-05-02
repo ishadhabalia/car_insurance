@@ -249,10 +249,8 @@ class Register:
         vp3_text.grid(row=3,column=1)
         vp4_text = Label(validpass_frame, text="At least 1 character from $#@",font=fontStyle)
         vp4_text.grid(row=4,column=1)
-        vp5_text = Label(validpass_frame, text="At least 1 letter between a-z",font=fontStyle)
+        vp5_text = Label(validpass_frame, text="Minimum length of password should be 8 and maximum 15",font=fontStyle)
         vp5_text.grid(row=5,column=1)
-        vp6_text = Label(validpass_frame, text="Minimum length of password should be 8 and maximum 15",font=fontStyle)
-        vp6_text.grid(row=6,column=1)
 
         regpasswordlabel=Label(register_frame,text="Password:",font=fontStyle)  
         regpasswordlabel.grid(row=5,column=0,pady=10)
@@ -371,8 +369,6 @@ class Register:
                                                                              self.var_pass.get(),
                                                                              self.var_name.get(),
                                                                              self.var_email.get(),
-                                                                            #  self.var_gender.get(),
-                                                                            #  self.var_age,
                                                                             ))
           mydb.commit()
           messagebox.showinfo("Success","Registered Successfully! Now you can login to your account.")
@@ -499,10 +495,10 @@ class View_Policies:
           expdate=expdate.strftime("%d-%m-%Y")
 
           lst = [('Personal Details',''),('Name: '+userinfo[2],'Email ID: '+userinfo[3]),
-('Gender:'+policyinfo[i][2],'Age: '+str(policyinfo[i][3])),('Car Details',''),
-('Year Of Registration:'+str(policyinfo[i][4]),''),('City: '+policyinfo[i][5],'Vehicle CC: '+str(policyinfo[i][6])),
-('Policy Details',''),('Policy ID: '+str(policyinfo[i][1]),'Premium Amount: '+str(policyinfo[i][11])),
-        ('Self Damage insurance: '+str(policyinfo[i][12]),'Third Party Damage insurance: '+str(policyinfo[i][13])),
+('Gender:'+policyinfo[i][2],'Age: '+str(policyinfo[i][3])+" years"),('Car Details',''),
+('Year Of Registration: '+str(policyinfo[i][4]),'Price of car: Rs. '+str(policyinfo[i][7])),('City: '+policyinfo[i][5],'Vehicle CC: '+str(policyinfo[i][6])),
+('Policy Details',''),('Policy ID: '+str(policyinfo[i][1]),'Premium Amount: Rs. '+str("{:.2f}".format(policyinfo[i][11]))),
+        ('Self Damage insurance: Rs. '+str("{:.2f}".format(policyinfo[i][12])),'Third Party Damage insurance: Rs. '+str("{:.2f}".format(policyinfo[i][13]))),
         ('Policy Active Date: '+str(startdate),'Policy Expiration Date: '+str(expdate))
 
            ]
@@ -520,14 +516,14 @@ class View_Policies:
           #generating table for insurance schedule
           if policyinfo[i][9]=='Yearly':
             startdate=startdate.strftime("%d-%m-%Y")
-            lst = [('Payment Date: ','Cost: '),(str(startdate),str(policyinfo[i][11]))]
+            lst = [('Payment Date: ','Cost: '),(str(startdate),"Rs. "+str("{:.2f}".format(policyinfo[i][11])))]
           elif policyinfo[i][9]=='Half-yearly':
             date2=startdate+relativedelta(months=+6)
             startdate=startdate.strftime("%d-%m-%Y")
             date2=date2.strftime("%d-%m-%Y")
             lst = [('Payment Date: ','Cost: '),
-        (str(startdate),str(policyinfo[i][11]/2)),
-        (str(date2),str(policyinfo[i][11]/2))]
+        (str(startdate),"Rs. "+str("{:.2f}".format(policyinfo[i][11]/2))),
+        (str(date2),"Rs. "+str("{:.2f}".format(policyinfo[i][11]/2)))]
             
           elif policyinfo[i][9]=='Quaterly':
             date2=startdate+relativedelta(months=+3)
@@ -539,10 +535,10 @@ class View_Policies:
             date3=date3.strftime("%d-%m-%Y")
             date4=date4.strftime("%d-%m-%Y")
             lst = [('Payment Date: ','Cost: '),
-        (str(startdate),str(policyinfo[i][11]/4)),
-        (str(date2),str(policyinfo[i][11]/4)),
-        (str(date3),str(policyinfo[i][11]/4)),
-        (str(date4),str(policyinfo[i][11]/4))]
+        (str(startdate),"Rs. "+str("{:.2f}".format(policyinfo[i][11]/4))),
+        (str(date2),"Rs. "+str("{:.2f}".format(policyinfo[i][11]/4))),
+        (str(date3),"Rs. "+str("{:.2f}".format(policyinfo[i][11]/4))),
+        (str(date4),"Rs. "+str("{:.2f}".format(policyinfo[i][11]/4)))]
          
          #creating table
           for x in range(len(lst)):
@@ -586,7 +582,7 @@ class Buy_Policy:
         buypolicy_frame=LabelFrame(self.root,text="",padx=30,pady=30,bd=5)
         buypolicy_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        agelabel=Label(buypolicy_frame,text="Age:",font=fontStyle)
+        agelabel=Label(buypolicy_frame,text="Age(In Years):",font=fontStyle)
         agelabel.grid(row=0,column=0,pady=10)
         self.ageentry=Entry(buypolicy_frame,width=35,borderwidth=5,textvariable=self.var_age)
         self.ageentry.grid(row=0,column=1,pady=10)
@@ -601,7 +597,7 @@ class Buy_Policy:
         self.capentry=Entry(buypolicy_frame,width=35,borderwidth=5,textvariable=self.var_capacity)
         self.capentry.grid(row=2,column=1,pady=10)
 
-        pricelabel=Label(buypolicy_frame,text="Price:",font=fontStyle)
+        pricelabel=Label(buypolicy_frame,text="Price(In Rupees):",font=fontStyle)
         pricelabel.grid(row=3,column=0,pady=10)
         self.priceentry=Entry(buypolicy_frame,width=35,borderwidth=5,textvariable=self.var_price)
         self.priceentry.grid(row=3,column=1,pady=10)
@@ -768,10 +764,10 @@ class Policy_Details:
          thirdins=price*0.3
 
        lst = [('Personal Details',''),('Name: '+userinfo[2],'Email ID: '+userinfo[3]),
-        ('Gender:'+gender,'Age: '+str(age)),('Car Details',''),
-        ('Year Of Registration:'+str(year),''),('City: '+str(capacity),'Vehicle CC: '+str(capacity)),
-        ('Policy Details',''),('Premium Amount: '+str(premium),''),
-                ('Self Damage insurance: '+str(selfins),'Third Party Damage insurance: '+str(thirdins))
+        ('Gender:'+gender,'Age: '+str(age)+" years"),('Car Details',''),
+        ('Year Of Registration:'+str(year),'Price of car: Rs. '+str(price)),('City: '+str(city),'Vehicle CC: '+str(capacity)),
+        ('Policy Details',''),('Premium Amount: Rs. '+str("{:.2f}".format(premium)),''),
+                ('Self Damage insurance: Rs. '+str("{:.2f}".format(selfins)),'Third Party Damage insurance: Rs. '+str("{:.2f}".format(thirdins)))
         ]
 
        for x in range(len(lst)):
@@ -787,14 +783,14 @@ class Policy_Details:
           #generating table for insurance schedule
        if install=='Yearly':
          startdate=startdate.strftime("%d-%m-%Y")
-         lst = [('Payment Date: ','Cost: '),(str(startdate),str(premium))]
+         lst = [('Payment Date: ','Cost: '),(str(startdate),"Rs. "+str("{:.2f}".format(premium)))]
        elif install=='Half-yearly':
          date2=startdate+relativedelta(months=+6)
          startdate=startdate.strftime("%d-%m-%Y")
          date2=date2.strftime("%d-%m-%Y")
          lst = [('Payment Date: ','Cost: '),
-        (str(startdate),str(premium/2)),
-        (str(date2),str(premium/2))]
+        (str(startdate),"Rs. "+str("{:.2f}".format(premium/2))),
+        (str(date2),"Rs. "+str("{:.2f}".format(premium/2)))]
             
        elif install=='Quaterly':
          date2=startdate+relativedelta(months=+3)
@@ -806,10 +802,10 @@ class Policy_Details:
          date3=date3.strftime("%d-%m-%Y")
          date4=date4.strftime("%d-%m-%Y")
          lst = [('Payment Date: ','Cost: '),
-        (str(startdate),str(premium/4)),
-        (str(date2),str(premium/4)),
-        (str(date3),str(premium/4)),
-        (str(date4),str(premium/4))]
+        (str(startdate),"Rs. "+str("{:.2f}".format(premium/4))),
+        (str(date2),"Rs. "+str("{:.2f}".format(premium/4))),
+        (str(date3),"Rs. "+str("{:.2f}".format(premium/4))),
+        (str(date4),"Rs. "+str("{:.2f}".format(premium/4)))]
          
          #creating table
        for x in range(len(lst)):
@@ -928,9 +924,9 @@ class Confirm_Window():
         confirmdetails_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         lst = [('Policy ID:',policyinfo[1]),
-           ('Premium:',policyinfo[11]),('Insured Amount',''),
-           ('Self Damage:',policyinfo[12]),
-           ('Third party:',policyinfo[13])]
+           ('Premium: ',"Rs. "+str(policyinfo[11])),('Insured Amount',''),
+           ('Self Damage: ',"Rs. "+str(policyinfo[12])),
+           ('Third party: ',"Rs. "+str(policyinfo[13]))]
 
         for x in range(len(lst)):
           for y in range(len(lst[0])):
@@ -974,7 +970,7 @@ class Confirm_Window():
     
     col_width = epw/2
     data = [['Name: '+userinfo[2],'Email ID: '+userinfo[3]],
-['Gender:'+policyinfo[2],'Age: '+str(policyinfo[3])]
+['Gender:'+policyinfo[2],'Age: '+str(policyinfo[3])+" years"]
 ]
     th = pdf.font_size 
     pdf.set_font('Times','B',14.0) 
@@ -996,10 +992,10 @@ class Confirm_Window():
     pdf.set_font('Times','',10.0) 
     pdf.ln(th)
     
-    col_width_veh = epw/3
+    col_width_veh = epw/2
    
     data = [
-['Year Of Registration:'+str(policyinfo[4]),'City: '+policyinfo[5],'Vehicle CC: '+str(policyinfo[6])]
+['Year Of Registration:'+str(policyinfo[4]),'Price of car: Rs. '+str(policyinfo[7])],['City: '+policyinfo[5],'Vehicle CC: '+str(policyinfo[6])]
 ]
     for row in data:
         for datum in row:
@@ -1019,8 +1015,8 @@ class Confirm_Window():
     startdate=startdate.strftime("%d-%m-%Y") 
     expdate=expdate.strftime("%d-%m-%Y")
     
-    data = [['Policy ID: '+str(policyinfo[1]),'Premium Amount: '+str(policyinfo[11])],
-        ['Self Damage insurance: '+str(policyinfo[12]),'Third Party Damage insurance: '+str(policyinfo[13])],
+    data = [['Policy ID: '+str(policyinfo[1]),'Premium Amount: Rs. '+str(policyinfo[11])],
+        ['Self Damage insurance: Rs. '+str(policyinfo[12]),'Third Party Damage insurance: Rs. '+str(policyinfo[13])],
         ['Policy Active Date: '+str(startdate),'Policy Expiration Date: '+str(expdate)]
        ]
     for row in data:
@@ -1040,7 +1036,7 @@ class Confirm_Window():
     startdate=policyinfo[8]+ timedelta(days=7)    
     if policyinfo[9]=='Yearly':
         startdate=startdate.strftime("%d-%m-%Y")
-        data_date = [['Payment Date: ','Cost: '],[str(startdate),str(policyinfo[11])]]
+        data_date = [['Payment Date: ','Cost: '],[str(startdate),"Rs. "+str(policyinfo[11])]]
     
     elif policyinfo[9]=='Half-yearly':
         date2=startdate+relativedelta(months=+6)
@@ -1048,8 +1044,8 @@ class Confirm_Window():
         date2=date2.strftime("%d-%m-%Y")
         
         data_date = [['Payment Date: ','Cost: '],
-        [str(startdate),str(policyinfo[11]/2)],
-        [str(date2),str(policyinfo[11]/2)]
+        [str(startdate),"Rs. "+str(policyinfo[11]/2)],
+        [str(date2),"Rs. "+str(policyinfo[11]/2)]
         ]
     
     elif policyinfo[9]=='Quaterly':
@@ -1061,10 +1057,10 @@ class Confirm_Window():
         date3=date3.strftime("%d-%m-%Y")
         date4=date4.strftime("%d-%m-%Y")
         data_date = [['Payment Date: ','Cost: '],
-        [str(startdate),str(policyinfo[11]/4)],
-        [str(date2),str(policyinfo[11]/4)],
-        [str(date3),str(policyinfo[11]/4)],
-        [str(date4),str(policyinfo[11]/4)]
+        [str(startdate),"Rs. "+str(policyinfo[11]/4)],
+        [str(date2),"Rs. "+str(policyinfo[11]/4)],
+        [str(date3),"Rs. "+str(policyinfo[11]/4)],
+        [str(date4),"Rs. "+str(policyinfo[11]/4)]
         ]
     
     for row in data_date:
