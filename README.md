@@ -27,6 +27,8 @@ pip install -r requirements.txt
 ```
 python carpolicy.py
 ```
+## Note: For database access enter your username and password instead of root_temp and root@123 respectively
+
 ## Highlights
 * Register
 * Login
